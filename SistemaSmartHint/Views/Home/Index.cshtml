@@ -1,0 +1,127 @@
+﻿@model PagedList.IPagedList<SistemaSmartHint.Models.ClienteModel>
+
+
+
+
+<div class="row" style="padding-top:15px;">
+    <div class="col-lg-10">
+        <h4>
+            Consulte os seus clientes cadastrados na sua loja ou realize o cadastro de novos clientes
+        </h4>
+    </div>
+    
+    <div class="col-lg-2"><button class="btn btn-primary" onclick="CadastrarCliente()">Adicionar Cliente</button></div>
+
+</div>
+
+
+
+<div class="row" style="padding-top:15px;">
+    <div class="col-lg-10">
+        <h2>
+            Lista de Clientes Cadastrados
+        </h2>
+    </div>
+
+    <div class="col-lg-2" style="vertical-align:central;"><br/><button class="btn btn-primary">Filtrar Clientes</button></div>
+
+</div>
+
+
+@* <div class="row" style="padding-top:25px;">
+   
+<form asp-controller="Home" asp-action="FiltrarCliente">
+
+    <div class="col-lg-2">
+        <label>Nome/Razão Social</label>
+        <input asp-for="Nome_Razao2" class="form-control" id="nome_razao" placeholder="Nome ou Razão Social do Cliente" />
+    </div>
+
+    <div class="col-lg-2">
+        <label>E-mail</label>
+        <input asp-for="Email" class="form-control" id="telefone" placeholder="Telefone do Cliente" />
+    </div>
+
+    <div class="col-lg-2">
+        <label>Telefone</label>
+        <input asp-for="Telefone" class="form-control" id="telefone" placeholder="Telefone do Cliente" />
+    </div>
+
+    <div class="col-lg-2">
+        <label>Data de Cadastro</label>
+        <input type="date" asp-for="Data_cadastro" class="form-control" id="data_cadastro" placeholder="Selecione uma data ou período" />
+    </div>
+
+    <div class="col-lg-2">
+        <label>Bloqueado</label>
+        <select asp-for="Bloqueado" class="form-control" id="bloqueado">
+            <option value="">Selecione:</option>    
+            <option value="1">Sim</option>
+            <option value="0">Não</option>
+        </select>
+    </div>
+        <button type="submit" class="btn btn-success">Aplicar Filtros</button>
+  </form>  
+</div> *@
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <td align="center"><input type="checkbox" value="" onclick="CheckAll(this)" /></td>
+            <th>Nome/Razão Social</th>
+            <td>E-mail</td>
+            <td>Telefone</td>
+            <td>Data de Cadastro</td>
+            <td>Bloqueado</td>
+            <td>Ações</td>
+        </tr>
+    </thead>
+
+    <tbody>
+        
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td align="center"><input type="checkbox" name="check_cliente" value="@item.Id.ToString()" /></td>
+                <td >@item.Nome_Razao.ToString()</td>
+                <td>@item.Email.ToString()</td>
+                <td>@item.Telefone.ToString()</td>
+                <td>@item.Data_Cadastro.ToString()</td>
+                <td>@item.Bloqueado.ToString()</td>
+                <td style="width:45px;"><button class="btn btn-default" onclick="CadastrarCliente(@item.Id.ToString())">Editar</button></td>
+            </tr>
+        }
+        
+
+    </tbody>
+
+
+</table> 
+
+
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@* @Html.PagedListPager(Model, page => Url.Action("Index", new { pagina = page })) *@
+
+<script>
+    function CadastrarCliente(id){
+        if (id == null) {
+            id = "";
+        }
+        else{
+            id = "/" + id
+        }
+
+        window.location.href = window.location.origin + "/Home/CadastrarCliente" + id
+    }
+
+    function CheckAll(value) {
+        
+            checkboxes = document.getElementsByName('check_cliente');
+            for (var i = 0, n = checkboxes.length; i < n; i++) {
+                checkboxes[i].checked = value.checked;
+            }
+        
+    }
+</script>
